@@ -93,6 +93,7 @@ class DjangoLibrary:
             'python',
             self.manage,
             'makemigrations',
+            '--settings=%s' % self.settings,
         ]
         subprocess.call(args)
 
@@ -102,6 +103,7 @@ class DjangoLibrary:
             'python',
             self.manage,
             'migrate',
+            '--settings=%s' % self.settings,
         ]
         subprocess.call(args)
 
@@ -112,6 +114,7 @@ class DjangoLibrary:
             self.manage,
             'flush',
             '--noinput',
+            '--settings=%s' % self.settings,
         ]
         subprocess.call(args)
 
