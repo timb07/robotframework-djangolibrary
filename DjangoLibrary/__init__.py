@@ -187,11 +187,8 @@ user.save()""".format(
         self.create_user(username, email, password,
                          is_superuser=True, is_staff=True)
 
-    def start_django(self):
+    def start_django_simple(self):
         """Start the Django server."""
-        self.clear_db()
-        self.manage_makemigrations()
-        self.manage_migrate()
         logger.console("-" * 78)
         args = [
             'python',
@@ -212,6 +209,13 @@ user.save()""".format(
             "Django started (PID: %s)" % self.django_pid,
         )
         logger.console("-" * 78)
+
+    def start_django(self):
+        """Start the Django server."""
+        self.manage_flush()
+        self.manage_makemigrations()
+        self.manage_migrate()
+        self.start_django_simple()
 
     def stop_django(self):
         """Stop the Django server."""
