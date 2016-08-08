@@ -54,7 +54,7 @@ class DjangoLibrary:
 
     def __init__(self, host="0.0.0.0", port=8000, path='mysite/mysite',
                  manage='mysite/manage.py', settings='mysite.settings',
-                 db=None):
+                 db=None, user_model='django.contrib.auth.models'):
         """Django2Library can be imported with optional arguments.
 
         `host` is the hostname of your Django instance. Default value is
@@ -69,6 +69,8 @@ class DjangoLibrary:
 
         `settings` is the path to your Django instance settings.py.
 
+        `user_model` is the module path of the module from which to import the "User" model.
+
         `db` is deprecated. Please don't use it.
 
         Examples:
@@ -80,6 +82,7 @@ class DjangoLibrary:
         self.path = os.path.realpath(path)
         self.manage = os.path.realpath(manage)
         self.settings = settings
+        self.user_model = user_model
         if db:
             warn(
                 "Using the DjangoLibrary 'db' parameter is deprecated. " +
@@ -136,7 +139,7 @@ class DjangoLibrary:
         "is_staff=True")."""
 
         to_run = """
-from django.contrib.auth.models import User
+from {user_model} import User
 user = User.objects.create_user(
     '{0}',
     email='{1}',
@@ -150,6 +153,7 @@ user.save()""".format(
             safe_utf8(password),
             kwargs.get('is_superuser', False),
             kwargs.get('is_staff', False),
+            **{'user_model': self.user_model}
         )
         args = [
             'python',
