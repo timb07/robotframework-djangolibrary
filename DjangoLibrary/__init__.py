@@ -131,6 +131,16 @@ class DjangoLibrary:
         )
         self.manage_flush()
 
+    def manage_loaddata(self, *args):
+        """Load specified fixtures by running 'python manage.py loaddata *args'."""
+        cmd_args = [
+            'python',
+            self.manage,
+            'loaddata',
+            '--settings=%s' % self.settings,
+        ] + list(args)
+        subprocess.call(cmd_args)
+
     def create_user(self, username, email, password, **kwargs):
         """Create a regular Django user in the default auth model.
 
