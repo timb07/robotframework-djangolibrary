@@ -155,8 +155,8 @@ user = User.objects.create_user(
     email='{1}',
     password='{2}',
 )
-user.is_superuser = '{3}'
-user.is_staff = '{4}'
+user.is_superuser = {3}
+user.is_staff = {4}
 user.save()""".format(
             safe_utf8(username),
             safe_utf8(email),
