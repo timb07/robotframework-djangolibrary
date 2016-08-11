@@ -182,6 +182,37 @@ user.save()""".format(
 
         django.communicate(safe_bytes(to_run))
 
+    def add_user_to_group(self, username, group):
+            """Add a Django user to the named group (which must already exist).
+            """
+
+            to_run = """
+from {user_model} import User
+from django.contrib.auth.models import Group
+user = User.objects.get(username='{0}')
+group = Group.objects.get(name='{1}')
+user.groups.add(group)""".format(
+                safe_utf8(username),
+                safe_utf8(group),
+                **{'user_model': self.user_model}
+            )
+            args = [
+                'python',
+                self.manage,
+                'shell',
+                '--plain',
+                '--settings=%s' % self.settings,
+            ]
+
+            django = subprocess.Popen(
+                args,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+
+            django.communicate(safe_bytes(to_run))
+
     def create_superuser(self, username, email, password):
         """Create a Django superuser in the default auth model."""
         self.create_user(username, email, password,
